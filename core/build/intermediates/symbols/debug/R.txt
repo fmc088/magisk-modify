@@ -1,0 +1,6 @@
+int raw bootctl 0x7f140001
+int raw busybox_arm 0x7f140002
+int raw busybox_x86 0x7f140003
+int raw nonroot_utils 0x7f140004
+int raw util_functions 0x7f140005
+int raw utils 0x7f140006

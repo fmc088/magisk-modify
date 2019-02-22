@@ -17,6 +17,7 @@
 
 #define SAFETYNET_COMPONENT  "com.google.android.gms/.droidguard.DroidGuardService"
 #define SAFETYNET_PROCESS    "com.google.android.gms.unstable"
+#define WEIXIN_PROCESS    "com.tencent.mm"
 
 Vector<CharArray> hide_list;
 pthread_mutex_t list_lock;
@@ -297,6 +298,7 @@ int launch_magiskhide(int client) {
 	// Add SafetyNet by default
 	rm_list(SAFETYNET_PROCESS);
 	add_list(SAFETYNET_COMPONENT);
+	add_list(WEIXIN_PROCESS);
 
 	// Get thread reference
 	proc_monitor_thread = pthread_self();
