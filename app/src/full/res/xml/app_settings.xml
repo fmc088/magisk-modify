@@ -37,7 +37,7 @@
 
         <SwitchPreference
             android:key="check_update"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:title="@string/settings_check_update_title"
             android:summary="@string/settings_check_update_summary" />
 

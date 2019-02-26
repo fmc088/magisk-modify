@@ -24,22 +24,6 @@
 
     <group
         android:checkableBehavior="single"
-        android:id="@+id/second_group">
-
-        <item
-            android:id="@+id/modules"
-            android:icon="@drawable/ic_extension"
-            android:title="@string/modules"/>
-
-        <item
-            android:id="@+id/downloads"
-            android:icon="@drawable/ic_cloud_download"
-            android:title="@string/downloads"/>
-
-    </group>
-
-    <group
-        android:checkableBehavior="single"
         android:id="@+id/third_group">
 
         <item
@@ -54,22 +38,6 @@
 
     </group>
 
-    <group
-        android:checkableBehavior="single"
-        android:id="@+id/forth_group">
 
-        <item
-            android:checkable="false"
-            android:id="@+id/app_about"
-            android:icon="@drawable/ic_info_outline"
-            android:title="@string/about"/>
-
-        <item
-            android:checkable="false"
-            android:id="@+id/donation"
-            android:icon="@drawable/ic_attach_money"
-            android:title="@string/donation"/>
-
-    </group>
 
 </menu>

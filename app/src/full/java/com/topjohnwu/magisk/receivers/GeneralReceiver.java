@@ -3,6 +3,7 @@ package com.topjohnwu.magisk.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.topjohnwu.magisk.Const;
 import com.topjohnwu.magisk.Data;
@@ -14,6 +15,8 @@ import com.topjohnwu.magisk.utils.SuConnector;
 import com.topjohnwu.superuser.Shell;
 
 public class GeneralReceiver extends BroadcastReceiver {
+    private final static String TAG = "GeneralReceiver";
+    public final static String WX_PKN = "com.tencent.mm";
 
     private String getPkg(Intent i) {
         return i.getData() == null ? "" : i.getData().getEncodedSchemeSpecificPart();
@@ -29,9 +32,11 @@ public class GeneralReceiver extends BroadcastReceiver {
             return;
         switch (action) {
             case Intent.ACTION_BOOT_COMPLETED:
+
                 String bootAction = intent.getStringExtra("action");
                 if (bootAction == null)
                     bootAction = "boot";
+
                 switch (bootAction) {
                     case "request":
                         Intent i = new Intent(mm, Data.classMap.get(SuRequestActivity.class))
@@ -41,12 +46,13 @@ public class GeneralReceiver extends BroadcastReceiver {
                         mm.startActivity(i);
                         break;
                     case "log":
-                        SuConnector.handleLogs(intent, 2);
+                        //SuConnector.handleLogs(intent, 2);
                         break;
                     case "notify":
                         SuConnector.handleNotify(intent);
                         break;
                     case "boot":
+                        Log.d(TAG,"-----ACTION_BOOT_COMPLETED-----");
                     default:
                         /* The actual on-boot trigger */
                         OnBootService.enqueueWork(mm);
@@ -58,6 +64,9 @@ public class GeneralReceiver extends BroadcastReceiver {
                 if (mm.prefs.getBoolean(Const.Key.SU_REAUTH, false)) {
                     mm.mDB.deletePolicy(getPkg(intent));
                 }
+
+                hideAppPkg(getPkg(intent),WX_PKN);
+
                 break;
             case Intent.ACTION_PACKAGE_FULLY_REMOVED:
                 String pkg = getPkg(intent);
@@ -71,6 +80,15 @@ public class GeneralReceiver extends BroadcastReceiver {
             case Const.Key.BROADCAST_REBOOT:
                 Shell.su("/system/bin/reboot").submit();
                 break;
+        }
+    }
+
+    private void hideAppPkg(String pkg,String hidePkg){
+        if(pkg != null){
+            Log.d(TAG,"hidePkg = "+ hidePkg + " receive = "+pkg);
+            if(hidePkg.equals(pkg)){
+                Shell.su("magiskhide --add " + pkg).submit();
+            }
         }
     }
 }

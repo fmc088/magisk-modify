@@ -270,7 +270,7 @@ public class MagiskFragment extends BaseFragment
         if (!shownDialog) {
             if (Data.remoteMagiskVersionCode > Data.magiskVersionCode
                     || Data.remoteManagerVersionCode > BuildConfig.VERSION_CODE) {
-                install();
+               // install();
             } else if (Data.remoteMagiskVersionCode >= Const.MAGISK_VER.FIX_ENV &&
                     !ShellUtils.fastCmdResult("env_check")) {
                 new EnvFixDialog(requireActivity()).show();

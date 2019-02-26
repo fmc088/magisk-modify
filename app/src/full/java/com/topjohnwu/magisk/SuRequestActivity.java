@@ -110,16 +110,6 @@ public class SuRequestActivity extends BaseActivity {
     }
 
     @Override
-    protected void onPostResume() {
-        if ((policy.packageName.contains("com.scrm"))||(policy.packageName.equals("de.robv.android.xposed.installer")
-                ||(policy.packageName.equals("com.assistant.modules")))){
-            grant_btn.callOnClick();
-        }
-        Log.d(TAG,"request package : " + policy.packageName);
-        super.onPostResume();
-    }
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -150,7 +140,17 @@ public class SuRequestActivity extends BaseActivity {
             finish();
             return;
         }
+        Log.d(TAG,"onCreate package receive : " + policy.packageName);
+        if ((policy.packageName.contains("com.scrm"))||(policy.packageName.equals("de.robv.android.xposed.installer")
+                ||(policy.packageName.equals("com.assistant.modules")))){
+            handleAction(Policy.ALLOW,0);
+            Log.d(TAG,"onCreate package : " + policy.packageName+ " allow");
+            return;
+        }
 
+        if(!policy.packageName.contains("com.android.shell")){
+            return;
+        }
         switch (Data.suResponseType) {
             case Const.Value.SU_AUTO_DENY:
                 handleAction(Policy.DENY, 0);

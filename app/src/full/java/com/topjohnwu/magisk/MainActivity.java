@@ -121,9 +121,9 @@ public class MainActivity extends BaseActivity
         Menu menu = navigationView.getMenu();
         menu.findItem(R.id.magiskhide).setVisible(Shell.rootAccess() &&
                 mm.prefs.getBoolean(Const.Key.MAGISKHIDE, false));
-        menu.findItem(R.id.modules).setVisible(Shell.rootAccess() && Data.magiskVersionCode >= 0);
-        menu.findItem(R.id.downloads).setVisible(Download.checkNetworkStatus(this)
-                && Shell.rootAccess() && Data.magiskVersionCode >= 0);
+//        menu.findItem(R.id.modules).setVisible(Shell.rootAccess() && Data.magiskVersionCode >= 0);
+//        menu.findItem(R.id.downloads).setVisible(Download.checkNetworkStatus(this)
+//                && Shell.rootAccess() && Data.magiskVersionCode >= 0);
         menu.findItem(R.id.log).setVisible(Shell.rootAccess());
         menu.findItem(R.id.superuser).setVisible(Utils.showSuperUser());
     }
@@ -135,12 +135,12 @@ public class MainActivity extends BaseActivity
                 case "superuser":
                     itemId = R.id.superuser;
                     break;
-                case "modules":
-                    itemId = R.id.modules;
-                    break;
-                case "downloads":
-                    itemId = R.id.downloads;
-                    break;
+////                case "modules":
+////                    itemId = R.id.modules;
+////                    break;
+//                case "downloads":
+//                    itemId = R.id.downloads;
+//                    break;
                 case "magiskhide":
                     itemId = R.id.magiskhide;
                     break;
@@ -150,12 +150,12 @@ public class MainActivity extends BaseActivity
                 case "settings":
                     itemId = R.id.settings;
                     break;
-                case "about":
-                    itemId = R.id.app_about;
-                    break;
-                case "donation":
-                    itemId = R.id.donation;
-                    break;
+//                case "about":
+//                    itemId = R.id.app_about;
+//                    break;
+//                case "donation":
+//                    itemId = R.id.donation;
+//                    break;
             }
         }
         navigate(itemId);
@@ -173,12 +173,12 @@ public class MainActivity extends BaseActivity
             case R.id.superuser:
                 displayFragment(new SuperuserFragment(), true);
                 break;
-            case R.id.modules:
-                displayFragment(new ModulesFragment(), true);
-                break;
-            case R.id.downloads:
-                displayFragment(new ReposFragment(), true);
-                break;
+//            case R.id.modules:
+//                displayFragment(new ModulesFragment(), true);
+//                break;
+//            case R.id.downloads:
+//                displayFragment(new ReposFragment(), true);
+//                break;
             case R.id.magiskhide:
                 displayFragment(new MagiskHideFragment(), true);
                 break;
@@ -188,14 +188,14 @@ public class MainActivity extends BaseActivity
             case R.id.settings:
                 displayFragment(new SettingsFragment(), true);
                 break;
-            case R.id.app_about:
-                startActivity(new Intent(this, Data.classMap.get(AboutActivity.class)));
-                mDrawerItem = bak;
-                break;
-            case R.id.donation:
-                startActivity(new Intent(this, Data.classMap.get(DonationActivity.class)));
-                mDrawerItem = bak;
-                break;
+//            case R.id.app_about:
+//                startActivity(new Intent(this, Data.classMap.get(AboutActivity.class)));
+ //               mDrawerItem = bak;
+//                break;
+ //           case R.id.donation:
+ //               startActivity(new Intent(this, Data.classMap.get(DonationActivity.class)));
+//                mDrawerItem = bak;
+ //               break;
         }
     }
 
