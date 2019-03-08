@@ -10,8 +10,8 @@ public class UpdateCheckService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        Shell.getShell();
-        CheckUpdates.check(() -> jobFinished(params, false));
+        //Shell.getShell();
+        //CheckUpdates.check(() -> jobFinished(params, false));
         return true;
     }
 

@@ -1,0 +1,4 @@
+com.topjohnwu.magisk.core
+raw nonroot_utils
+raw util_functions
+raw utils

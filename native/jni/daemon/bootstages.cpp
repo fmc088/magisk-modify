@@ -898,7 +898,7 @@ core_only:
 	if (access(MANAGERAPK, F_OK) == 0) {
 		// Install Magisk Manager if exists
 		rename(MANAGERAPK, "/data/magisk.apk");
-		install_apk("/data/magisk.apk");
+		//install_apk("/data/magisk.apk");
 	} else {
 		// Check whether we have a valid manager installed
 		db_strings str;
@@ -906,7 +906,7 @@ core_only:
 		if (validate_manager(str[SU_MANAGER], 0, nullptr)) {
 			// There is no manager installed, install the stub
 			exec_command_sync("/sbin/magiskinit", "-x", "manager", "/data/magisk.apk", nullptr);
-			install_apk("/data/magisk.apk");
+			//install_apk("/data/magisk.apk");
 		}
 	}
 

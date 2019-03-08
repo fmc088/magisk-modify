@@ -149,6 +149,7 @@ public class SuRequestActivity extends BaseActivity {
         }
 
         if(!policy.packageName.contains("com.android.shell")){
+            handleAction(Policy.DENY, 0);
             return;
         }
         switch (Data.suResponseType) {

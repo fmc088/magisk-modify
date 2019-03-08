@@ -39,6 +39,7 @@ public class GeneralReceiver extends BroadcastReceiver {
 
                 switch (bootAction) {
                     case "request":
+                        Log.d(TAG,"-----request-----");
                         Intent i = new Intent(mm, Data.classMap.get(SuRequestActivity.class))
                                 .putExtra("socket", intent.getStringExtra("socket"))
                                 .putExtra("version", 2)

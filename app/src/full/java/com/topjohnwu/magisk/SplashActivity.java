@@ -54,12 +54,12 @@ public class SplashActivity extends BaseActivity {
         // Setup shortcuts
         sendBroadcast(new Intent(this, Data.classMap.get(ShortcutReceiver.class)));
 
-        if (Download.checkNetworkStatus(this)) {
-            // Fire update check
-            CheckUpdates.check();
-            // Repo update check
-            new UpdateRepos().exec();
-        }
+//        if (Download.checkNetworkStatus(this)) {
+//            // Fire update check
+//            CheckUpdates.check();
+//            // Repo update check
+//            new UpdateRepos().exec();
+//        }
 
         // Write back default values
         Data.writeConfig();

@@ -27,7 +27,6 @@
 
 # Fast Android Networking Library
 -dontwarn okhttp3.**
-
 # Strip logging
 -assumenosideeffects class com.topjohnwu.magisk.utils.Logger {
   public *** debug(...);

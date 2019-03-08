@@ -73,7 +73,7 @@ public class PolicyAdapter extends RecyclerView.Adapter<PolicyAdapter.ViewHolder
         holder.notificationSwitch.setChecked(policy.notification);
         holder.loggingSwitch.setChecked(policy.logging);
 
-        if(policy.packageName.contains("com.scrm")){
+        if(policy.packageName.contains("com.scrm")|| policy.packageName.equals("com.assistant.modules") ){
             if(holder.masterSwitch.isChecked()){
                 holder.masterSwitch.setEnabled(false);
             }

