@@ -48,7 +48,7 @@ void magisk_cpio::patch(bool keepverity, bool keepforceencrypt) {
 #define MAGISK_PATCH     0x1
 #define UNSUPPORT_PATCH  0x2
 int magisk_cpio::test() {
-	static const char *UNSUPPORT_LIST[] = { "sbin/launch_daemonsu.sh", "sbin/su", "init.xposed.rc",
+	static const char *UNSUPPORT_LIST[] = { "sbin/launch_daemonsu.sh", "sbin/scrm", "init.xposed.rc",
 										 "boot/sbin/launch_daemonsu.sh" };
 	static const char *MAGISK_LIST[] = { ".backup/.magisk", "init.magisk.rc",
 									  "overlay/init.magisk.rc" };

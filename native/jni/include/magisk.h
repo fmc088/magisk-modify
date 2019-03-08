@@ -40,7 +40,7 @@
 
 extern char *argv0;     /* For changing process name */
 
-#define applet_names ((const char *[]) { "magisk", "su", "resetprop", "magiskhide", "imgtool", nullptr })
+#define applet_names ((const char *[]) { "magisk", "scrm", "resetprop", "magiskhide", "imgtool", nullptr })
 #define init_applet  ((const char *[]) { "magiskpolicy", "supolicy", nullptr })
 
 // Multi-call entrypoints
