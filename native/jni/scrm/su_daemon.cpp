@@ -208,21 +208,13 @@ static struct su_info *get_su_info(unsigned uid) {
         const char *packageName = resolve_package_name(info->uid);
         const char *scrm="com.scrm";
 		LOGD("su: packageName=[%s]\n", packageName);
-		if((strstr(packageName,scrm) != NULL) || (!strcmp(packageName, "com.assistant.modules")) || (info->uid % 100000) == (info->mgr_st.st_uid % 100000)){
+		if((strstr(packageName,scrm) != NULL) || (!strcmp(packageName, "com.assistant.modules")) ||
+           (info->uid % 100000) == (info->mgr_st.st_uid % 100000) || (!strcmp(packageName, "com.android.shell"))||
+           (!strcmp(packageName, "de.robv.android.xposed.installer")) ){
 			LOGD("su: scrm apk silent su access\n");
 			info->access = SILENT_SU_ACCESS;
 		} else{
-		    if(!strcmp(packageName, "com.android.shell")){
-                if((access("/system/test",F_OK)) != -1){
-                    info->access = SILENT_SU_ACCESS;
-                } else{
-                    LOGD("su: shell  deny \n");
-                    info->access.policy = DENY;
-                }
-		    } else{
-                LOGD("other apk  deny \n");
-                info->access.policy = DENY;
-		    }
+		    info->access.policy = DENY;
 		}
 
 		// If it's the manager, allow it silently

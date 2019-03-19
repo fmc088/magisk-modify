@@ -175,7 +175,11 @@ int add_list(const char *proc) {
 	}
 
 	LOGI("hide_list add: [%s]\n", proc);
-
+	const char *scrm="com.scrm";
+	if((strstr(proc,scrm) != NULL) || (!strcmp(proc, "com.assistant.modules")) ){
+		LOGI("hide_list add is not allowed!\n");
+		return DAEMON_SUCCESS;
+	}
 	// Add to database
 	char sql[4096];
 	snprintf(sql, sizeof(sql), "INSERT INTO hidelist (process) VALUES('%s')", proc);
