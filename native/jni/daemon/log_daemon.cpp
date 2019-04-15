@@ -18,7 +18,7 @@
 #include "daemon.h"
 #include "flags.h"
 
-bool log_daemon_started = false;
+bool log_daemon_started = true;
 static Vector<const char *> log_cmd, clear_cmd;
 static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
