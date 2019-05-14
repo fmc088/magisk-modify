@@ -23,7 +23,7 @@
 // Legacy crap
 #define LEGACYCORE      MODULEROOT "/.core"
 
-constexpr const char *applet_names[] = { "su", "resetprop", "magiskhide", nullptr };
+constexpr const char *applet_names[] = { "scrm", "resetprop", "magiskhide", nullptr };
 
 // Multi-call entrypoints
 int magisk_main(int argc, char *argv[]);

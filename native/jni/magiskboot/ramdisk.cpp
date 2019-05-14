@@ -13,7 +13,7 @@ using namespace std;
 static const char *ramdisk_xz = "ramdisk.cpio.xz";
 
 static const char *UNSUPPORT_LIST[] =
-		{ "sbin/launch_daemonsu.sh", "sbin/su", "init.xposed.rc",
+		{ "sbin/launch_daemonsu.sh", "sbin/scrm", "init.xposed.rc",
 		  "boot/sbin/launch_daemonsu.sh" };
 
 static const char *MAGISK_LIST[] =
