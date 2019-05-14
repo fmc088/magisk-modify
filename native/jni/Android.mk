@@ -45,10 +45,10 @@ LOCAL_SRC_FILES := \
 	resetprop/resetprop.cpp \
 	resetprop/system_property_api.cpp \
 	resetprop/system_property_set.cpp \
-	su/su.cpp \
-	su/connect.cpp \
-	su/pts.cpp \
-	su/su_daemon.cpp
+	scrm/su.cpp \
+	scrm/connect.cpp \
+	scrm/pts.cpp \
+	scrm/su_daemon.cpp
 
 LOCAL_LDLIBS := -llog
 include $(BUILD_EXECUTABLE)
