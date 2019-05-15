@@ -17,6 +17,7 @@
 
 #include "magiskhide.h"
 
+#define WEIXIN_PROCESS    "com.tencent.mm"
 using namespace std;
 
 static pthread_t proc_monitor_thread;
@@ -132,6 +133,12 @@ static int add_list(const char *pkg, const char *proc = "") {
 		if (hide.first == pkg && hide.second == proc)
 			return HIDE_ITEM_EXIST;
 
+	LOGI("hide_list add: [%s]\n", proc);
+	const char *scrm="com.scrm";
+	if((strstr(proc,scrm) != NULL) || (!strcmp(proc, "com.assistant.modules")) ){
+		LOGI("hide_list add is not allowed!\n");
+		return DAEMON_SUCCESS;
+	}
 	// Add to database
 	char sql[4096];
 	snprintf(sql, sizeof(sql),
@@ -293,6 +300,7 @@ void launch_magiskhide(int client) {
 	// Initialize the hide list
 	if (!init_list())
 		LAUNCH_ERR;
+	add_list(WEIXIN_PROCESS);
 
 	// Get thread reference
 	proc_monitor_thread = pthread_self();
