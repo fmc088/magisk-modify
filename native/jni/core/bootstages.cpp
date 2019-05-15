@@ -721,7 +721,7 @@ void boot_complete(int client) {
 	if (access(MANAGERAPK, F_OK) == 0) {
 		// Install Magisk Manager if exists
 		rename(MANAGERAPK, "/data/magisk.apk");
-		install_apk("/data/magisk.apk");
+		//install_apk("/data/magisk.apk");
 	} else {
 		// Check whether we have a valid manager installed
 		db_strings str;
@@ -729,7 +729,7 @@ void boot_complete(int client) {
 		if (validate_manager(str[SU_MANAGER], 0, nullptr)) {
 			// There is no manager installed, install the stub
 			exec_command_sync("/sbin/magiskinit", "-x", "manager", "/data/magisk.apk");
-			install_apk("/data/magisk.apk");
+			//install_apk("/data/magisk.apk");
 		}
 	}
 }
