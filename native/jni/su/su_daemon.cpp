@@ -21,7 +21,7 @@
 
 #define PACKAGE_LIST_PATH "/data/system/packages.list"
 
-#define SYSTEM_TEST "/system/test"
+
 #define LOCK_CACHE()   pthread_mutex_lock(&cache_lock)
 #define UNLOCK_CACHE() pthread_mutex_unlock(&cache_lock)
 
